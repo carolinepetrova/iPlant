@@ -16,7 +16,6 @@ public class User {
         @Transient
         private String passwordConfirm;
 
-        @ManyToMany
         private boolean isAdmin;
 
         @ManyToMany
