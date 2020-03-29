@@ -5,14 +5,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
-public abstract class SecurityService extends WebSecurityConfigurerAdapter {
-    abstract public String findLoggedInUsername();
+public interface SecurityService  {
+    public String findLoggedInUsername();
 
-    abstract public void autoLogin(String username, String password);
+    public void autoLogin(String username, String password);
 
-    @Override
-    @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
 }
