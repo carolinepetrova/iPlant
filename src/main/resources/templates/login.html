@@ -32,13 +32,13 @@
             <div class="tab-pane tabs-animation fade show active" id="tab-content-0" role="tabpanel">
                 <div class="main-card mb-3 card">
                     <div class="card-body"><h3 style="letter-spacing: -1px" class="text-center font-weight-bold text-lowercase mt-2">Login to account</h3>
-                        <form method="POST" th:action="@{/login}"  th:object="${userForm}"  class="">
+                        <form method="POST" th:action="@{/login}"  th:object="${user}"  class="">
                             <div align="center" th:if="${param.error}">
                                 <div class="alert alert-danger fade show" role="alert">Username or Password invalid, please try again</div>
                             </div>
                         <div class="form-row">
                                 <div class="col-md-12">
-                                    <div class="position-relative form-group"><label for="exampleEmail11" class="">Email</label><input name="email" id="exampleEmail11" placeholder="" type="email" class="form-control"></div>
+                                    <div class="position-relative form-group"><label for="exampleEmail11" class="">Email</label><input name="username" id="exampleEmail11" placeholder="" type="email" class="form-control"></div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="position-relative form-group"><label for="examplePassword11" class="">Password</label><input name="password" id="examplePassword11" placeholder="" type="password" class="form-control"></div>
@@ -60,27 +60,6 @@
             </div>
         </div>
     </div></div>
-
-<!--
-    <div class="container">
-    <form method="POST" action="${contextPath}/login" class="form-signin">
-        <h2 class="form-heading">Log in</h2>
-
-        <div class="form-group ${error != null ? 'has-error' : ''}">
-            <span>${message}</span>
-            <input name="username" type="text" class="form-control" placeholder="Username"
-                   autofocus="true"/>
-            <input name="password" type="password" class="form-control" placeholder="Password"/>
-            <span>${error}</span>
-            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Log In</button>
-            <h4 class="text-center"><a href="${contextPath}/registration">Create an account</a></h4>
-        </div>
-    </form>
-</div>
-
--->
 </div>
 </div>
 </body>

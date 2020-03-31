@@ -34,7 +34,6 @@ public class UserController {
         userValidator.validate(userForm, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            System.out.println(bindingResult.getFieldErrors());
             return "registration";
         }
 
@@ -56,8 +55,8 @@ public class UserController {
         return "login";
     }
 
-    @GetMapping({"/", "/welcome"})
+    @GetMapping({"/", "/home"})
     public String welcome(Model model) {
-        return "welcome";
+        return "home";
     }
 }
