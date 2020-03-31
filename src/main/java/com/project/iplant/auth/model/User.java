@@ -1,5 +1,7 @@
 package com.project.iplant.auth.model;
 
+import org.springframework.web.bind.annotation.ModelAttribute;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -9,14 +11,18 @@ public class User {
         @Id
         private int id;
 
+        @Column(name = "name")
+        private String name;
+
+         @Column(name = "username")
         private String username;
 
+        @Column(name = "password")
         private String password;
 
+        @Column(name = "passwordConfirm")
         @Transient
         private String passwordConfirm;
-
-        private boolean isAdmin;
 
         @ManyToMany
     private Set<Role> roles;
@@ -53,12 +59,12 @@ public class User {
             this.passwordConfirm = passwordConfirm;
         }
 
-       public boolean getIsAdmin() {
-            return isAdmin;
-       }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-        public void setIsAdmin(boolean isAdmin) {
-            this.isAdmin = isAdmin;
+    public String getName() {
+            return name;
         }
     public Set<Role> getRoles() {
         return roles;

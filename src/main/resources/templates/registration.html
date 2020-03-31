@@ -1,10 +1,106 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Language" content="en">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>iPlant Registration</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" />
+    <meta name="description" content="This is an example dashboard created using build-in elements and components.">
+    <meta name="msapplication-tap-highlight" content="no">
+    <!--
+    =========================================================
+    * ArchitectUI HTML Theme Dashboard - v1.0.0
+    =========================================================
+    * Product Page: https://dashboardpack.com
+    * Copyright 2019 DashboardPack (https://dashboardpack.com)
+    * Licensed under MIT (https://github.com/DashboardPack/architectui-html-theme-free/blob/master/LICENSE)
+    =========================================================
+    * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+    -->
+    <link th:href="@{css/main.css}"  rel="stylesheet"></head>
 
+<body>
+<div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header closed-sidebar-mobile closed-sidebar">
+    <div class="container h-100">
+
+        <div class="row h-100 justify-content-center align-items-center">
+            <div class="col-md-5 col-sm-6">
+                <div class="tab-pane tabs-animation fade show active" id="tab-content-0" role="tabpanel">
+                    <div class="main-card mb-3 card">
+                        <div class="card-body">
+                            <h3 style="letter-spacing: -1px" class="text-center font-weight-bold text-lowercase mt-2">register</h3>
+
+                            <form method="POST" th:action="@{/registration}"  th:object="${user}" class="">
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        <div class="position-relative form-group">
+
+                                            <label class="">Email</label>
+                                            <input name="username" th:field="*{username}" type="email" class="form-control"/>
+                                            <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-danger help-block" ></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="position-relative form-group">
+                                            <label class="">Name</label>
+                                            <input name="name" th:field="*{name}" type="text" class="form-control"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="position-relative form-group">
+                                            <label for="examplePassword11" class="">Password</label>
+                                            <input name="password" id="examplePassword11" th:field="*{password}" type="password" class="form-control"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="position-relative form-group">
+                                            <label for="examplePassword11" class="">Confirm Password</label>
+                                            <input name="passwordConfirm"  th:field="*{passwordConfirm}" type="password" class="form-control"/>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-sm-6">
+                                        <button class="mt-2 btn btn-success float-right" type="submit">Sign up</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div></div>
+
+    <!--
+        <div class="container">
+        <form method="POST" action="${contextPath}/login" class="form-signin">
+            <h2 class="form-heading">Log in</h2>
+
+            <div class="form-group ${error != null ? 'has-error' : ''}">
+                <span>${message}</span>
+                <input name="username" type="text" class="form-control" placeholder="Username"
+                       autofocus="true"/>
+                <input name="password" type="password" class="form-control" placeholder="Password"/>
+                <span>${error}</span>
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Log In</button>
+                <h4 class="text-center"><a href="${contextPath}/registration">Create an account</a></h4>
+            </div>
+        </form>
+    </div>
+
+    -->
+</div>
+</div>
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+<script th:src="@{/scripts/main.js}" type="text/javascript"></script></body>
 </html>
