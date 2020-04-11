@@ -1,5 +1,6 @@
 package com.project.iplant.app_endpoint;
 
+import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -15,7 +16,7 @@ import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 /**
  * Basic Echo Client Socket
  */
-@WebSocket(maxTextMessageSize = 64 * 1024)
+@WebSocket(maxTextMessageSize = 1024 * 1024)
 public class RobotModeClient
 {
     private final CountDownLatch closeLatch;
@@ -45,7 +46,11 @@ public class RobotModeClient
     public void onConnect(Session session)
     {
         System.out.printf("Got connect: %s%n", session);
-        this.session = session;
+        synchronized (this) {
+            this.session = session;
+            notifyAll();
+        }
+        /*
         try
         {
             Future<Void> fut;
@@ -59,11 +64,14 @@ public class RobotModeClient
         {
             t.printStackTrace();
         }
+
+         */
     }
 
-    @OnWebSocketMessage
+
     public void onMessage(String msg)
     {
+
         System.out.printf("Got msg: %s%n", msg);
         if (msg.contains("Thanks"))
         {
@@ -76,5 +84,18 @@ public class RobotModeClient
     {
         System.out.print("WebSocket Error: ");
         cause.printStackTrace(System.out);
+    }
+
+    public synchronized void sendMessage(String str) {
+        try {
+            synchronized(this) {
+                while (session == null) {
+                    wait();
+                }
+            }
+            session.getRemote().sendString(str);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
 }
