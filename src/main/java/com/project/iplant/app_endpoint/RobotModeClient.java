@@ -43,13 +43,11 @@ public class RobotModeClient
     }
 
     @OnWebSocketConnect
-    public void onConnect(Session session)
+    public synchronized void onConnect(Session session)
     {
         System.out.printf("Got connect: %s%n", session);
-        synchronized (this) {
-            this.session = session;
-            notifyAll();
-        }
+        this.session = session;
+        notifyAll();
         /*
         try
         {
@@ -88,11 +86,7 @@ public class RobotModeClient
 
     public synchronized void sendMessage(String str) {
         try {
-            synchronized(this) {
-                while (session == null) {
-                    wait();
-                }
-            }
+            wait();
             session.getRemote().sendString(str);
         } catch (Throwable e) {
             e.printStackTrace();
