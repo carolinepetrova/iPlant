@@ -26,7 +26,7 @@ public class User {
         private String passwordConfirm;
 
         @ManyToMany
-    private Set<Role> roles;
+        private Set<Role> roles;
 
         public int getId() {
             return id;

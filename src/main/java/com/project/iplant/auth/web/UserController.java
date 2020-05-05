@@ -60,15 +60,7 @@ public class UserController {
 
     @GetMapping({"/", "/home"})
     public String welcome(Model model) {
-        String name;
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            name = ((CustomUserDetails)principal).getName();
-
-        } else {
-            name = principal.toString();
-        }
-        model.addAttribute("name",name);
+        model.addAttribute("title", "Dashboard | iPlant");
         return "home";
     }
 }
