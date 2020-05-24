@@ -57,10 +57,4 @@ public class UserController {
 
         return "login";
     }
-
-    @GetMapping({"/", "/home"})
-    public String welcome(Model model) {
-        model.addAttribute("title", "Dashboard | iPlant");
-        return "home";
-    }
 }

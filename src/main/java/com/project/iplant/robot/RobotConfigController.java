@@ -14,7 +14,6 @@ public class RobotConfigController {
 
     RobotConfig robotConfig;
 
-
     @GetMapping("/robot/robotconfig")
     public String showConfig(Model model) throws IOException {
         robotConfig = new RobotConfig("robot.properties");
@@ -28,10 +27,8 @@ public class RobotConfigController {
         if(robot.getAddress() == null)
             result.rejectValue("robotAddress", "Must.contain.value", "Field must not be empty");
         if (result.hasErrors()) {
-            System.out.println(result);
             return "robotconfig";
         }
-        System.out.printf(robot.toString());
         robotConfig.setRobotProperties(robot);
         model.addAttribute("success", "Configuration was added successfully");
         return "redirect:/robot/robotconfig";

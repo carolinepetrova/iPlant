@@ -1,4 +1,4 @@
-package com.project.iplant.app_endpoint;
+package com.project.iplant.scheduler_service;
 
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
@@ -13,17 +13,15 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketError;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 
-/**
- * Basic Echo Client Socket
- */
+
 @WebSocket(maxTextMessageSize = 1024 * 1024)
-public class RobotModeClient
+public class AppEndpointSocketClient
 {
     private final CountDownLatch closeLatch;
     @SuppressWarnings("unused")
     private Session session;
 
-    public RobotModeClient()
+    public AppEndpointSocketClient()
     {
         this.closeLatch = new CountDownLatch(1);
     }

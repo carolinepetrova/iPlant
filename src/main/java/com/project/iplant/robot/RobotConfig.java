@@ -8,15 +8,15 @@ public class RobotConfig {
     final InputStream inputPropFile;
     final OutputStream outputPropFile;
 
-    public RobotConfig(String propertiesName) throws IOException, FileNotFoundException {
+    public RobotConfig(String propertiesName) throws IOException {
         inputPropFile = new FileInputStream("src/main/resources/" + propertiesName);
-        outputPropFile = new FileOutputStream("src/main/resources/" + propertiesName);
+        outputPropFile = new FileOutputStream("src/main/resources/" + propertiesName, true);
+        prop.load(inputPropFile);
     }
 
     public RobotConfig(File file) throws IOException {
         inputPropFile = new FileInputStream(file);
         outputPropFile = new FileOutputStream(file);
-        prop.load(inputPropFile);
     }
 
     public void setRobotProperties(Robot robot) throws IOException {
@@ -24,7 +24,9 @@ public class RobotConfig {
             prop.setProperty("address", robot.getAddress());
         prop.setProperty("mode",robot.getMode());
         prop.setProperty("lastChecked", robot.getLastChecked());
+        System.out.println(prop.stringPropertyNames());
         prop.store(outputPropFile, null);
+        outputPropFile.close();
     }
 
     public Robot getRobotProperties() throws IOException {
@@ -33,6 +35,7 @@ public class RobotConfig {
         robot.setAddress(prop.getProperty("address"));
         robot.setLastChecked(prop.getProperty("lastChecked"));
         robot.setMode(prop.getProperty("mode"));
+        inputPropFile.close();
         return robot;
     }
 }
