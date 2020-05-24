@@ -1,0 +1,41 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<ul class="vertical-nav-menu mt-4" th:fragment="nav">
+    <li>
+        <a th:href="@{/home}" class="mm-active">
+            <i class="metismenu-icon pe-7s-rocket"></i>
+            Dashboard
+        </a>
+    </li>
+    <li class="app-sidebar__heading">Robot</li>
+    <li>
+        <a th:href="@{/robot/robotconfig}">
+            <i class="metismenu-icon pe-7s-diamond"></i>
+            Change Configuration
+        </a>
+        <a th:href="@{/schedule}">
+            <i class="metismenu-icon pe-7s-diamond"></i>
+            Schedule Check
+        </a>
+    </li>
+    <li class="app-sidebar__heading">Plants</li>
+    <li>
+        <a th:href="@{/plants/addplant}">
+            <i class="metismenu-icon pe-7s-display2"></i>
+            Add Plant
+        </a>
+        <a th:href="@{/plants}">
+            <i class="metismenu-icon pe-7s-display2"></i>
+            All Plants
+        </a>
+    </li>
+    <li class="app-sidebar__heading">Analytics</li>
+    <li>
+        <a href="dashboard-boxes.html">
+            <i class="metismenu-icon pe-7s-display2"></i>
+            Plant Analytics
+        </a>
+    </li>
+</ul>
+</html>
