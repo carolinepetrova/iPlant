@@ -1,4 +1,4 @@
-package com.project.iplant.mqtt_receiver.config;
+package com.project.iplant.mqtt.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;

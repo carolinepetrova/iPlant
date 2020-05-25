@@ -1,6 +1,6 @@
-package com.project.iplant.mqtt_receiver.config;
+package com.project.iplant.mqtt.config;
 
-import com.project.iplant.mqtt_receiver.subscriber.MQTTSubscriberBase;
+import com.project.iplant.mqtt.subscriber.MQTTSubscriberBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

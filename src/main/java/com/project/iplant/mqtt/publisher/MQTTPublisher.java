@@ -1,6 +1,6 @@
-package com.project.iplant.mqtt_receiver.publisher;
+package com.project.iplant.mqtt.publisher;
 
-import com.project.iplant.mqtt_receiver.config.MQTTConfig;
+import com.project.iplant.mqtt.config.MQTTConfig;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;

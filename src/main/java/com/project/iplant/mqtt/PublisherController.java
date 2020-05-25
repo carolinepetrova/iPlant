@@ -1,7 +1,6 @@
-package com.project.iplant.mqtt_receiver;
+package com.project.iplant.mqtt;
 
-import com.google.gson.JsonObject;
-import com.project.iplant.mqtt_receiver.publisher.MQTTPublisherBase;
+import com.project.iplant.mqtt.publisher.MQTTPublisherBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -1,4 +1,4 @@
-package com.project.iplant.mqtt_receiver.publisher;
+package com.project.iplant.mqtt.publisher;
 
 /**
  * MQTT Publisher Configuration class
