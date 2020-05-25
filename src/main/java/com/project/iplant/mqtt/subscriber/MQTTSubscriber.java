@@ -1,8 +1,12 @@
-package com.project.iplant.mqtt_receiver.subscriber;
+package com.project.iplant.mqtt.subscriber;
 
 import java.sql.Timestamp;
+import java.util.concurrent.TimeUnit;
 
-import com.project.iplant.mqtt_receiver.config.MQTTConfig;
+import com.google.gson.JsonObject;
+import com.project.iplant.metrics.MetricsIngestion;
+import com.project.iplant.metrics.service.InfluxDBService;
+import com.project.iplant.mqtt.config.MQTTConfig;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -10,8 +14,11 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+import org.influxdb.dto.Point;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 
@@ -27,13 +34,16 @@ public class MQTTSubscriber extends MQTTConfig implements MqttCallback, MQTTSubs
 
 	private String brokerUrl = null;
 	final private String colon = ":";
-	final private String clientId = "demoClient2";
+	final private String clientId = "iPlant";
 
 	private MqttClient mqttClient = null;
 	private MqttConnectOptions connectionOptions = null;
 	private MemoryPersistence persistence = null;
 
 	private static final Logger logger = LoggerFactory.getLogger(MQTTSubscriber.class);
+
+	@Autowired
+	InfluxDBService influxDBService;
 
 	public MQTTSubscriber() {
 		this.config();
@@ -62,6 +72,16 @@ public class MQTTSubscriber extends MQTTConfig implements MqttCallback, MQTTSubs
 	public void messageArrived(String topic, MqttMessage message) throws Exception {
 		// Called when a message arrives from the server that matches any
 		// subscription made by the client
+		JSONObject jsonObject = new JSONObject(message.toString());
+
+		Point point = Point.measurement("soilmoisture")
+				.time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+				.tag("plantID",jsonObject.get("plantID").toString())
+				.addField("moisture",jsonObject.get("moisture").toString())
+				.build();
+
+		influxDBService.write(point);
+
 		String time = new Timestamp(System.currentTimeMillis()).toString();
 		System.out.println();
 		System.out.println("***********************************************************************");

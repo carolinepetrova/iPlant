@@ -1,0 +1,7 @@
+spring:
+  influxdb:
+    url: http://localhost:8086
+    username: admin
+    password: admin
+    database: iplant
+    retention-policy: autogen

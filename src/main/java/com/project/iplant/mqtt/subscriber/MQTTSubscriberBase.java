@@ -1,6 +1,6 @@
-package com.project.iplant.mqtt_receiver.subscriber;
+package com.project.iplant.mqtt.subscriber;
 
-import com.project.iplant.mqtt_receiver.publisher.MQTTPublisherBase;
+import com.project.iplant.mqtt.publisher.MQTTPublisherBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
