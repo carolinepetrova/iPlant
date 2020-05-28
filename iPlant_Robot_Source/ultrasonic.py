@@ -7,6 +7,8 @@ import paho.mqtt.client as paho
 def on_connect(client, userdata, flags, rc):
     print("Connection returned result: "+connack_string(rc))
 
+def on_publish(client, userdata, mid):
+    print(client + " " + userdata + " " + mid)
 
 broker="localhost"
 port=1883
@@ -19,8 +21,7 @@ client1.username_pw_set(user, password=password)    #set username and password
 client1.connect(broker,port)
 client1.loop_start()
 
-def on_publish(client, userdata, mid):
-    print(client + " " + userdata + " " + mid)
+
 
 # use Raspberry Pi board pin numbers
 GPIO.setmode(GPIO.BCM)
