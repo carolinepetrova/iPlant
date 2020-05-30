@@ -5,6 +5,8 @@ import argparse
 import imutils
 import time
 import cv2
+import paho.mqtt.client as paho
+import json
 
 ap = argparse.ArgumentParser()
 ap.add_argument("-p", "--prototxt", required=True,
@@ -14,6 +16,24 @@ ap.add_argument("-m", "--model", required=True,
 ap.add_argument("-c", "--confidence", type=float, default=0.2,
 	help="minimum probability to filter weak detections")
 args = vars(ap.parse_args())
+
+def on_connect(client, userdata, flags, rc):
+    print("Connection returned result: "+connack_string(rc))
+
+def on_publish(client, userdata, mid):
+    print(client + " " + userdata + " " + mid)
+
+broker="localhost"
+port=1883
+user="guest"
+password="guest"
+client1=paho.Client()
+client1.on_connect = on_connect
+client1.on_publish = on_publish
+client1.username_pw_set(user, password=password)    #set username and password
+client1.connect(broker,port)
+client1.loop_start()
+
 
 # initialize the list of class labels MobileNet SSD was trained to
 # detect, then generate a set of bounding box colors for each class
@@ -29,7 +49,7 @@ net = cv2.dnn.readNetFromCaffe(args["prototxt"], args["model"])
 # initialize the video stream, allow the cammera sensor to warmup,
 # and initialize the FPS counter
 print("[INFO] starting video stream...")
-vs = VideoStream(src=0).start()
+vs = VideoStream(usePiCamera=True).start()
 time.sleep(2.0)
 fps = FPS().start()
 
@@ -69,11 +89,18 @@ while True:
 				COLORS[idx], 2)
 			y = startY - 15 if startY - 15 > 15 else startY + 15
 			print(label)
+			data = {
+				"object": CLASSES[idx],
+				"coords": [str(startX), str(endX)]
+			}
+			print(data)
+			ret= client1.publish("objectDetection",json.dumps(data),2)
+
 			cv2.putText(frame, label, (startX, y),
 				cv2.FONT_HERSHEY_SIMPLEX, 0.5, COLORS[idx], 2)
 
 	# show the output frame
-	cv2.imshow("Frame", frame)
+	#cv2.imshow("Frame", frame)
 	key = cv2.waitKey(1) & 0xFF
 	# if the `q` key was pressed, break from the loop
 	if key == ord("q"):
