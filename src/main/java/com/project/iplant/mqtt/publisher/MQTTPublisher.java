@@ -142,7 +142,7 @@ public class MQTTPublisher extends MQTTConfig implements MqttCallback,  MQTTPubl
 		try {
 			MqttMessage mqttmessage = new MqttMessage();
 			mqttmessage.setRetained(false);
-			mqttmessage.setPayload(jsonObject.get("message").toString().getBytes());
+			mqttmessage.setPayload(jsonObject.toString().getBytes());
 			mqttmessage.setQos(2);
 			this.mqttClient.publish(topic, mqttmessage);
 		} catch (MqttException me) {

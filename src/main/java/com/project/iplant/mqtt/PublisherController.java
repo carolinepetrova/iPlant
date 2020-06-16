@@ -14,7 +14,7 @@ public class PublisherController {
 
     @RequestMapping(value = "api/mqtt/", method = RequestMethod.POST)
     public String index(@RequestBody String data) {
-        publisher.publishMessage("soilmoisture2", data.toString());
+        publisher.publishMessage("scheduler", data.toString());
         return "Message sent to Broker";
     }
 }

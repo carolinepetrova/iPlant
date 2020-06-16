@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import com.project.iplant.metrics.MetricsIngestion;
 import com.project.iplant.metrics.service.InfluxDBService;
 import com.project.iplant.mqtt.config.MQTTConfig;
+import com.project.iplant.plantpictures.PlantPicturesWriterService;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -72,15 +73,22 @@ public class MQTTSubscriber extends MQTTConfig implements MqttCallback, MQTTSubs
 	public void messageArrived(String topic, MqttMessage message) throws Exception {
 		// Called when a message arrives from the server that matches any
 		// subscription made by the client
-		JSONObject jsonObject = new JSONObject(message.toString());
+		if (topic.equals("soilMoisture")) {
+			JSONObject jsonObject = new JSONObject(message.toString());
 
-		Point point = Point.measurement("soilmoisture")
-				.time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
-				.tag("plantID",jsonObject.get("plantID").toString())
-				.addField("moisture",jsonObject.get("moisture").toString())
-				.build();
+			Point point = Point.measurement("soilmoisture")
+					.time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+					.tag("plantID", jsonObject.get("plantID").toString())
+					.addField("moisture", jsonObject.get("moisture").toString())
+					.build();
 
-		influxDBService.write(point);
+			influxDBService.write(point);
+		}
+		if (topic.equals("rpiImage")) {
+			System.out.println(message.toString());
+			PlantPicturesWriterService plantPicturesWriterService = new PlantPicturesWriterService();
+			plantPicturesWriterService.savePicture(message.toString());
+		}
 
 		String time = new Timestamp(System.currentTimeMillis()).toString();
 		System.out.println();
@@ -114,7 +122,8 @@ public class MQTTSubscriber extends MQTTConfig implements MqttCallback, MQTTSubs
 	@Override
 	public void subscribeMessage(String topic) {
 		try {
-			this.mqttClient.subscribe("soilmoisture2", 2);
+			//this.mqttClient.subscribe("soilmoisture2", 2);
+			this.mqttClient.subscribe("rpiImage", 2);
 		} catch (MqttException e) {
 			e.printStackTrace();
 		}
@@ -126,11 +135,12 @@ public class MQTTSubscriber extends MQTTConfig implements MqttCallback, MQTTSubs
 	 * @see com.monirthought.mqtt.subscriber.MQTTSubscriberBase#disconnect()
 	 */
 	public void disconnect() {
-		try {
-			this.mqttClient.disconnect();
+	/*	try {
+			//this.mqttClient.disconnect();
 		} catch (MqttException me) {
 			logger.error("ERROR", me);
 		}
+		*/
 	}
 
 	/*
