@@ -12,8 +12,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
 import java.net.URI;
+import java.net.URL;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
@@ -23,36 +28,33 @@ public class SchedulerController {
     @Autowired
     PlantRepository plantRepository;
 
-    private void sendPayload(String payload) throws IOException {
-        //RobotConfig robotConfig = new RobotConfig("robot.properties");
+    private final String requestUrl = "http://localhost:8082/api/mqtt/";
 
-        //String destUri = robotConfig.getRobotProperties().getAddress();
-
-        String destUri = "ws://192.168.1.239:81";
-
-        WebSocketClient client = new WebSocketClient();
-        AppEndpointSocketClient socket = new AppEndpointSocketClient();
-
+    private String sendPayload(String payload) throws IOException {
         try {
-            client.start();
+            URL url = new URL(requestUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-            URI echoUri = new URI(destUri);
-            ClientUpgradeRequest request = new ClientUpgradeRequest();
-            client.setMaxIdleTimeout(Long.MAX_VALUE);
-            Future<Session> conn;
-            conn = client.connect(socket, echoUri, request);
-            socket.sendMessage(payload);
-            // wait for closed socket connection.
-            socket.awaitClose(5, TimeUnit.SECONDS);
-        } catch (Throwable t) {
-            t.printStackTrace();
-        } finally {
-            try {
-                client.stop();
-            } catch (Exception e) {
-                e.printStackTrace();
+            connection.setDoInput(true);
+            connection.setDoOutput(true);
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type", "text/plain;charset=UTF-8");
+            OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream(), "UTF-8");
+            writer.write(payload);
+            writer.close();
+            BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            StringBuffer jsonString = new StringBuffer();
+            String line;
+            while ((line = br.readLine()) != null) {
+                jsonString.append(line);
             }
+            br.close();
+            connection.disconnect();
+            return jsonString.toString();
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
         }
+
     }
 
     @GetMapping("/schedule")
@@ -72,7 +74,8 @@ public class SchedulerController {
             return "scheduler";
         }
         System.out.println(scheduler.toJsonObject());
-        this.sendPayload(scheduler.toJsonObject());
+
+        System.out.println(this.sendPayload(scheduler.toJsonObject()));
 
     return "scheduler";
     }

@@ -21,22 +21,23 @@ def on_message(client, userdata, msg):
     print(msg.payload.decode('utf-8'))
     payload_to_json = json.loads(msg.payload.decode('utf-8'))
     print(payload_to_json)
-    date_time_obj = datetime.datetime.strptime(payload_to_json["date"], '%d-%m-%Y %H:%M:%S')
-    cron = CronTab(tab="""{} {} {} {} * {} {}"""
+    print(payload_to_json["date"])
+    date_time_obj = datetime.datetime.strptime(payload_to_json["date"].replace("T", " "), '%Y-%m-%d %H:%M')
+    print(date_time_obj.minute)
+    cron = CronTab(tab="""{} {} {} {} * {} -q {}"""
     .format(date_time_obj.minute,date_time_obj.hour, 
-            date_time_obj.day, date_time_obj.month, args["program"], payload_to_json["plandIDs"]))
+            date_time_obj.day, date_time_obj.month, args["program"], ",".join(payload_to_json["plantIDs"])))
+    print(cron)
     cron.write(user=args["user"])
 
     
-broker="localhost"
+broker="192.168.1.109"
 port=1883
 user="guest"
 password="guest"
-client=paho.Client("scheduler")
+client=paho.Client()
 client.on_connect = on_connect
 client.on_message = on_message
-client.username_pw_set(user, password=password) 
 client.connect(broker,port)
-
 
 client.loop_forever()
